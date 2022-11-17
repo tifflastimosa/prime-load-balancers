@@ -3,7 +3,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class PrimeClient {
-    private final static int NUM_REQUEST = 1000;
+    private final static int NUM_REQUEST = 500;
     private final static int NUM_CLIENT_THREAD = 10;
     public static void main(String[] args) throws InterruptedException {
         BlockingQueue buffer = new LinkedBlockingQueue();
@@ -22,7 +22,7 @@ public class PrimeClient {
         System.out.println("Wall time is: " + elapsedMs + " milliseconds");
         float avgResponseTime = Consumer.globalResponseTimeCounter / NUM_REQUEST;
         System.out.println("Avg response time is: " + avgResponseTime + " milliseconds");
-        float numPrimeNumber = Consumer.globalPrimeNumberCounter / NUM_REQUEST * 100;
+        double numPrimeNumber = (double) Consumer.globalPrimeNumberCounter / (double) NUM_REQUEST * 100.0;
         System.out.println("% of prime number: " + numPrimeNumber + "%");
     }
 }

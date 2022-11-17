@@ -33,7 +33,6 @@ public class Consumer implements Runnable {
                     active = false;
                 }
                 String urlPath = url + String.valueOf(number);
-                System.out.println(urlPath);
                 HttpGet getRequest = new HttpGet(urlPath);
                 long start = System.currentTimeMillis();
                 HttpResponse response = httpClient.execute(getRequest);

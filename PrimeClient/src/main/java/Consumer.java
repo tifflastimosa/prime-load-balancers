@@ -12,6 +12,7 @@ public class Consumer implements Runnable {
     private boolean active = true;
     private final String url = "http://localhost:8080/a1server_war_exploded/prime";
     static int globalPrimeNumberCounter = 0;
+    static int globalResponseTimeCounter = 0;
 
     public Consumer(BlockingQueue buffer) {
         this.buffer = buffer;
@@ -21,6 +22,7 @@ public class Consumer implements Runnable {
     public void run() {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         int localPrimeNumberCounter = 0;
+        int localResponseTimeCounter = 0;
         while (active) {
             try {
                 Integer number = (Integer) buffer.take();
@@ -29,7 +31,10 @@ public class Consumer implements Runnable {
                 }
                 String urlPath = url + String.valueOf(number);
                 HttpGet getRequest = new HttpGet(urlPath);
+                long start = System.currentTimeMillis();
                 HttpResponse response = httpClient.execute(getRequest);
+                long elapsed = System.currentTimeMillis() - start;
+                localPrimeNumberCounter += elapsed;
                 if (response.getStatusLine().getStatusCode() == 200) {
                     localPrimeNumberCounter += 1;
                 }
@@ -43,5 +48,6 @@ public class Consumer implements Runnable {
             }
         }
         globalPrimeNumberCounter += localPrimeNumberCounter;
+        globalResponseTimeCounter += localResponseTimeCounter;
     }
 }

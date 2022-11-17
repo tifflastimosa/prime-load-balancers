@@ -8,7 +8,6 @@ public class Producer implements Runnable {
   protected static final int MIN = 1;
 
 
-
   public Producer(BlockingQueue<Integer> dataBuffer, Integer requests) {
     this.dataBuffer = dataBuffer;
     this.numRequests = requests;

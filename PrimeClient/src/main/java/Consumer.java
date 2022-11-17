@@ -34,7 +34,7 @@ public class Consumer implements Runnable {
                 long start = System.currentTimeMillis();
                 HttpResponse response = httpClient.execute(getRequest);
                 long elapsed = System.currentTimeMillis() - start;
-                localPrimeNumberCounter += elapsed;
+                localResponseTimeCounter += elapsed;
                 if (response.getStatusLine().getStatusCode() == 200) {
                     localPrimeNumberCounter += 1;
                 }

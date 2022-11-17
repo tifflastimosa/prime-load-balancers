@@ -3,16 +3,14 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class PrimeClient {
-    private final static int NUM_REQUEST = 500;
+    private final static int NUM_REQUEST = 1000;
     private final static int NUM_CLIENT_THREAD = 10;
+
     public static void main(String[] args) throws InterruptedException {
-        BlockingQueue buffer = new LinkedBlockingQueue();
         CountDownLatch latch = new CountDownLatch(NUM_CLIENT_THREAD);
-        Producer producer = new Producer(buffer, NUM_REQUEST);
-        Consumer consumer = new Consumer(buffer, latch);
+        Consumer consumer = new Consumer(latch);
         long start = System.currentTimeMillis();
         System.out.println("It's processing");
-        new Thread(producer).start();
         for (int i = 0; i < NUM_CLIENT_THREAD; i++) {
             new Thread(consumer).start();
         }

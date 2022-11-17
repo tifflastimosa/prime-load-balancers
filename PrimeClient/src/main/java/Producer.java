@@ -1,16 +1,19 @@
 import java.security.SecureRandom;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
 
 public class Producer implements Runnable {
   private final BlockingQueue<Integer> dataBuffer;
   private final Integer numRequests;
+  private final Integer numListeningThread;
   protected static final int MAX = 10000;
   protected static final int MIN = 1;
 
 
-  public Producer(BlockingQueue<Integer> dataBuffer, Integer requests) {
+  public Producer(BlockingQueue<Integer> dataBuffer, Integer numListeningThread, Integer numRequests) {
     this.dataBuffer = dataBuffer;
-    this.numRequests = requests;
+    this.numRequests = numRequests;
+    this.numListeningThread = numListeningThread;
   }
 
   @Override
@@ -33,4 +36,5 @@ public class Producer implements Runnable {
       e.printStackTrace();
     }
   }
+
 }

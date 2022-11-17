@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -9,13 +10,17 @@ import org.apache.http.impl.client.HttpClients;
 
 public class Consumer implements Runnable {
     private final BlockingQueue buffer;
+    private final CountDownLatch latch;
+    private final CountDownLatch secondLatch;
     private boolean active = true;
-    private final String url = "http://localhost:8080/a1server_war_exploded/prime";
+    private final String url = "http://52.43.122.2:8080/ServerAPI_war/prime/";
     static int globalPrimeNumberCounter = 0;
     static int globalResponseTimeCounter = 0;
 
-    public Consumer(BlockingQueue buffer) {
+    public Consumer(BlockingQueue buffer, CountDownLatch latch, CountDownLatch secondLatch) {
         this.buffer = buffer;
+        this.latch = latch;
+        this.secondLatch = secondLatch;
     }
 
     @Override
@@ -33,6 +38,7 @@ public class Consumer implements Runnable {
                 HttpGet getRequest = new HttpGet(urlPath);
                 long start = System.currentTimeMillis();
                 HttpResponse response = httpClient.execute(getRequest);
+                System.out.println(response.getStatusLine().getStatusCode());
                 long elapsed = System.currentTimeMillis() - start;
                 localPrimeNumberCounter += elapsed;
                 if (response.getStatusLine().getStatusCode() == 200) {
@@ -49,5 +55,11 @@ public class Consumer implements Runnable {
         }
         globalPrimeNumberCounter += localPrimeNumberCounter;
         globalResponseTimeCounter += localResponseTimeCounter;
+        latch.countDown();
+        System.out.println("latch countdown");
+        if (secondLatch != null && latch.getCount() == 0) {
+            secondLatch.countDown();
+            System.out.println("second latch countdown");
+        }
     }
 }

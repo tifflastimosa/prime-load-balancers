@@ -19,25 +19,26 @@ public class PrimeServlet extends HttpServlet {
       throws ServletException, IOException {
     // get the endpoint
     String urlPath = req.getPathInfo();
+    resp.setStatus(HttpServletResponse.SC_OK);
     // get N
     // validate if N
-    if (urlPath == null || urlPath.isEmpty()) {
-      resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      resp.getWriter().write("Missing parameters");
-    }
-
-    if (isURLValid(urlPath)) {
-      // 2 conditions
-      // if N is valid prime - then send OK response
-      convertURLPath(urlPath);
-      if (isPrime(Integer.parseInt(this.urlArray[3]))) {
-        resp.setStatus(HttpServletResponse.SC_OK);
-      }
-      // else N - N not valid prime - send 401 response
-    } else {
-      resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-    }
-    resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//    if (urlPath == null || urlPath.isEmpty()) {
+//      resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//      resp.getWriter().write("Missing parameters");
+//    }
+//
+//    if (isURLValid(urlPath)) {
+//      // 2 conditions
+//      // if N is valid prime - then send OK response
+//      convertURLPath(urlPath);
+//      if (isPrime(Integer.parseInt(this.urlArray[2]))) {
+//        resp.setStatus(HttpServletResponse.SC_OK);
+//      }
+//      // else N - N not valid prime - send 401 response
+//    } else {
+//      resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//    }
+//    resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
   }
 
   private void convertURLPath(String urlPath) {
@@ -45,7 +46,7 @@ public class PrimeServlet extends HttpServlet {
   }
 
   private boolean isURLValid(String urlPath) {
-    String urlPattern = "([01]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])/prime/\\d+";
+    String urlPattern = "/prime/\\d+";
     Pattern pattern = Pattern.compile(urlPattern, Pattern.CASE_INSENSITIVE);
     Matcher matcher = pattern.matcher(urlPath);
     return matcher.matches();
